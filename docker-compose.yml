@@ -1,0 +1,53 @@
+services:
+  # ─── MongoDB ───
+  mongo:
+    image: mongo:7
+    container_name: kids-skills-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - kids-network
+    restart: unless-stopped
+
+  # ─── Backend API ───
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME:-santhiyakrishdevops}/kids-skills-server:latest
+    container_name: kids-skills-server
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongo:27017/kids-skills
+    depends_on:
+      - mongo
+    networks:
+      - kids-network
+    restart: unless-stopped
+
+  # ─── Frontend (React + Nginx) ───
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME:-santhiyakrishdevops}/kids-skills-client:latest
+    container_name: kids-skills-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - kids-network
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  kids-network:
+    driver: bridge
