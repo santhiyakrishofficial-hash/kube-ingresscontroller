@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: santhiyakrishofficial/kids-skills-client:latest
+          image: santhiyakrishdevops/kids-skills-client:latest
           ports:
             - containerPort: 80
           resources:
