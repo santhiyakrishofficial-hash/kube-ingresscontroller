@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: santhiyakrishofficial/kids-skills-server:latest
+          image: santhiyakrishdevops/kids-skills-server:latest
           ports:
             - containerPort: 5000
           env:
