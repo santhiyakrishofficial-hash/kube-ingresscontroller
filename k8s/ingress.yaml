@@ -15,18 +15,18 @@ metadata:
   labels:
     app: kids-skills
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "30"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "30"
+
 spec:
   ingressClassName: nginx
+
   rules:
-    - host: kidskills.local
-      http:
+    - http:
         paths:
-          # Backend API: /api/* → server service
+          # Backend API
           - path: /api
             pathType: Prefix
             backend:
@@ -34,7 +34,8 @@ spec:
                 name: server
                 port:
                   number: 5000
-          # Frontend: /* → client service (catch-all)
+
+          # Frontend
           - path: /
             pathType: Prefix
             backend:
